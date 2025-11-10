@@ -1,4 +1,4 @@
-# Azure AKS Infrastructure
+# Terraform AKS Infrastructure
 
 Automação Terraform para infraestrutura Azure AKS com Application Gateway, PostgreSQL e Storage Account em arquitetura multi-VNet com peering.
 
