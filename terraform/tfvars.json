@@ -1,0 +1,85 @@
+{
+    "location": "eastus2",
+    "environment": "prd",
+    "department": "lab",
+    "gateway": {
+        "sku_name": "WAF_v2",
+        "sku_tier": "WAF_v2",
+        "sku_capacity": 1,
+        "vnet_address_space": ["10.7.0.0/16"],
+        "subnet_address_prefixes": ["10.7.0.0/22"],
+        "bastion_subnet_address_prefixes": ["10.7.4.0/24"],
+        "vms_subnet_address_prefixes": ["10.7.5.0/24"],
+        "build_server": {
+            "size": "Standard_B2s",
+            "image_publisher": "Canonical",
+            "image_offer": "0001-com-ubuntu-server-jammy",
+            "image_sku": "22_04-lts",
+            "image_version": "latest",
+            "os_disk_caching": "ReadWrite",
+            "os_disk_storage_account_type": "Standard_LRS"
+        },
+        "dev_server": {
+            "enabled": true,
+            "size": "Standard_B2ms",
+            "image_publisher": "MicrosoftWindowsServer",
+            "image_offer": "WindowsServer",
+            "image_sku": "2022-datacenter-smalldisk",
+            "image_version": "latest",
+            "os_disk_caching": "ReadWrite",
+            "os_disk_storage_account_type": "Standard_LRS"
+        },
+        "policy": {
+            "rate_limit_countries": ["BR"],
+            "rate_limit_threshold": 500,
+            "allow_countries": ["BR","US"]
+        }
+    },
+    "storages": {
+        "vnet_address_space": ["10.9.0.0/16"],
+        "postgres": {
+            "snet_address_prefixes": ["10.9.0.0/22"],
+            "server": {
+                "sku_name": "B_Standard_B2s",
+                "storage_mb": 32768,
+                "backup_retention_days": 7,
+                "geo_redundant_backup_enabled": false,
+                "auto_grow_enabled": false,
+                "zone": "1",
+                "version": "16",
+                "ssl_enforcement_enabled": true
+            }
+        },
+        "storage_account": {
+            "snet_address_prefixes": ["10.9.4.0/22"],
+            "account_tier": "Standard",
+            "account_replication_type": "LRS"
+        }
+    },
+    "aks": {
+        "kubernetes_version": "1.33",
+        "sku_tier": "Standard",
+        "vnet_address_space": ["10.8.0.0/16"],
+        "subnet_address_prefixes": ["10.8.0.0/22"],
+        "default_node_pool": {
+            "vm_size": "Standard_D4s_v3",
+            "node_count": 1,
+            "zones": [],
+            "auto_scaling": {
+                "enabled": true,
+                "min_count": 1,
+                "max_count": 2
+            }
+        },
+        "user_node_pool": {
+            "vm_size": "Standard_D4s_v3",
+            "node_count": 2,
+            "zones": [],
+            "auto_scaling": {
+                "enabled": true,
+                "min_count": 2,
+                "max_count": 5
+            }
+        }
+    }
+}
