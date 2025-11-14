@@ -1,9 +1,9 @@
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                              = local.sufix_aks_name
-  dns_prefix                        = local.sufix_aks_name
+  name                              = "aks-${local.sufix_aks_name}"
+  dns_prefix                        = "aks-${local.sufix_aks_name}"
   location                          = azurerm_resource_group.aks.location
   resource_group_name               = azurerm_resource_group.aks.name
-  node_resource_group               = "mc-${azurerm_resource_group.aks.name}"
+  node_resource_group               = "${azurerm_resource_group.aks.name}-mc"
   kubernetes_version                = var.aks.kubernetes_version
   sku_tier                          = var.aks.sku_tier
   private_cluster_enabled           = true
