@@ -26,4 +26,6 @@ terraform plan \
   -var-file=tfvars.json \
   -var "department=${DEPARTMENT}" \
   -var "environment=${ENVIRONMENT}" \
-  -var "location=${LOCATION}"
+  -var "location=${LOCATION}" \
+  -var "subscription_id=${SUBSCRIPTION_ID}" \
+  -var "tenant_id=${TENANT_ID}"

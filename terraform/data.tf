@@ -11,22 +11,22 @@ data "azurerm_storage_account" "shared" {
 }
 
 data "azurerm_key_vault_secret" "aks_pub_key" {
-  name         = "aks-${local.department}-${local.env}-ssh-pub"
+  name         = "aks-${local.department}-aks-${var.location}-${local.env}-ssh-pub"
   key_vault_id = data.azurerm_key_vault.shared.id
 }
 
 data "azurerm_key_vault_secret" "build_pub_key" {
-  name         = "build-server-${local.department}-${local.env}-ssh-pub"
+  name         = "vm-build-${local.department}-gateway-${var.location}-${local.env}-ssh-pub"
   key_vault_id = data.azurerm_key_vault.shared.id
 }
 
 data "azurerm_key_vault_secret" "psql_admin_password" {
-  name         = "psql-${local.department}-${local.env}"
+  name         = "psql-${local.department}-storages-${var.location}-${local.env}"
   key_vault_id = data.azurerm_key_vault.shared.id
 }
 
 data "azurerm_key_vault_secret" "dev_admin_password" {
-  name         = "dev-server-${local.department}-${local.env}"
+  name         = "vm-dev-${local.department}-gateway-${var.location}-${local.env}"
   key_vault_id = data.azurerm_key_vault.shared.id
 }
 
