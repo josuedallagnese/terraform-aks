@@ -1,10 +1,9 @@
 locals {
   department          = lower(var.department)
   env                 = lower(var.environment)
-  sufix               = "${local.department}-${var.location}-${local.env}"
-  sufix_aks_name      = "aks-${local.sufix}"
-  sufix_storages_name = "storages-${local.sufix}"
-  sufix_gateway_name  = "gateway-${local.sufix}"
+  sufix_aks_name      = "${local.department}-aks-${var.location}-${local.env}"
+  sufix_storages_name = "${local.department}-storages-${var.location}-${local.env}"
+  sufix_gateway_name  = "${local.department}-gateway-${var.location}-${local.env}"
   
   resource_groups_aks_name      = "rg-${local.sufix_aks_name}"
   resource_groups_storages_name = "rg-${local.sufix_storages_name}"
@@ -44,5 +43,7 @@ terraform {
 }
 
 provider "azurerm" {
+  subscription_id = var.subscription_id
+  tenant_id       = var.tenant_id
   features {}
 }

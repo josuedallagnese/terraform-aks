@@ -1,3 +1,13 @@
+variable "subscription_id" {
+  type        = string
+  description = "The subscription ID to deploy the resources."
+}
+
+variable "tenant_id" {
+  type        = string
+  description = "The tenant ID to deploy the resources."
+}
+
 variable "location" {
   type        = string
   default     = "eastus2"

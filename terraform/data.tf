@@ -1,13 +1,13 @@
 data "azurerm_client_config" "current" {}
 
 data "azurerm_key_vault" "shared" {
-  name                = "kv-shared-${local.department}-${var.location}"
-  resource_group_name = "rg-shared-${local.department}-${var.location}"
+  name                = "kv-${local.department}-shared-${var.location}"
+  resource_group_name = "rg-${local.department}-shared-${var.location}"
 }
 
 data "azurerm_storage_account" "shared" {
-  name                = "stshared${local.department}${var.location}"
-  resource_group_name = "rg-shared-${local.department}-${var.location}"
+  name                = "st${local.department}shared${var.location}"
+  resource_group_name = "rg-${local.department}-shared-${var.location}"
 }
 
 data "azurerm_key_vault_secret" "aks_pub_key" {

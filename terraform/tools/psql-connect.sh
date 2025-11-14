@@ -19,9 +19,9 @@ fi
 
 echo "[INFO] Using subscription: $SUBSCRIPTION_ID"
 
-KEY_VAULT_NAME="kv-shared-${DEPARTMENT}-${LOCATION}"
+KEY_VAULT_NAME="kv-${DEPARTMENT}-shared-${LOCATION}"
 PSQL_SECRET_NAME="psql-${DEPARTMENT}-${ENVIRONMENT}"
-PGSERVER="psql-storages-${DEPARTMENT}-${LOCATION}-${ENVIRONMENT}"
+PGSERVER="psql-${DEPARTMENT}-storages-${LOCATION}-${ENVIRONMENT}"
 
 echo "=============================================="
 echo "   CONNECT TO POSTGRES DATABASE: ${DATABASE} -- $DEPARTMENT-$ENVIRONMENT"

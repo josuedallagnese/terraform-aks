@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "main_storage" {
-  name                     = "st${replace(local.sufix, "-", "")}"
+  name                     = "st${replace(local.sufix_storages_name, "-", "")}"
   resource_group_name      = azurerm_resource_group.storages.name
   location                 = azurerm_resource_group.storages.location
   account_tier             = var.storages.storage_account.account_tier

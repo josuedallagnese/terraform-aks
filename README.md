@@ -39,13 +39,13 @@ sh ./scripts/terraform-apply.sh $DEPARTMENT $ENVIRONMENT $LOCATION
 ## Acesso
 
 ### AKS (via Build Server)
-1. Portal Azure → Resource Group `rg-gateway-$DEPARTMENT-$LOCATION-$ENVIRONMENT`
+1. Portal Azure → Resource Group `rg-$DEPARTMENT-gateway-$LOCATION-$ENVIRONMENT`
 2. VM `vm-build-...` → **Connect** → **Bastion** (usuário: `build`)
 3. Kubeconfig já configurado: `kubectl get nodes`
 
 ### PostgreSQL (via VM Windows - opcional)
 Se habilitada (`storages.postgres.management.enabled = true`):
-1. Portal Azure → Resource Group `rg-storages-$DEPARTMENT-$LOCATION-$ENVIRONMENT`
+1. Portal Azure → Resource Group `rg-$DEPARTMENT-storages-$LOCATION-$ENVIRONMENT`
 2. VM `vm-psql-mgt-...` → **Connect** → **Bastion** (usuário: `storage`)
 3. Instale ferramentas de gerenciamento (pgAdmin, DBeaver, etc.)
 
