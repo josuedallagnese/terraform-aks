@@ -23,7 +23,7 @@ echo "[INFO] Using subscription: $SUBSCRIPTION_ID"
 STORAGE_ACCOUNT="st${DEPARTMENT}shared${LOCATION}"
 KEY_VAULT_NAME="kv-${DEPARTMENT}-shared-${LOCATION}"
 CONTAINER_NAME="backups-${ENVIRONMENT}"
-PSQL_SECRET_NAME="psql-${DEPARTMENT}-${ENVIRONMENT}"
+PSQL_SECRET_NAME="psql-${DEPARTMENT}-storages-${LOCATION}-${ENVIRONMENT}"
 PGSERVER="psql-${DEPARTMENT}-storages-${LOCATION}-${ENVIRONMENT}"
 
 echo "=============================================="
