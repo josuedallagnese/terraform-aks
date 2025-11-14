@@ -82,7 +82,8 @@ resource "azurerm_kubernetes_cluster_node_pool" "userpool" {
   lifecycle {
     ignore_changes = [ 
       tags,
-      node_count
+      node_count,
+      upgrade_settings
      ]
   }
 }
