@@ -62,7 +62,7 @@
         "vnet_address_space": ["10.8.0.0/16"],
         "subnet_address_prefixes": ["10.8.0.0/22"],
         "default_node_pool": {
-            "vm_size": "Standard_D4s_v3",
+            "vm_size": "Standard_D2s_v3",
             "node_count": 1,
             "zones": [],
             "auto_scaling": {
@@ -72,7 +72,7 @@
             }
         },
         "user_node_pool": {
-            "vm_size": "Standard_D4s_v3",
+            "vm_size": "Standard_D2s_v3",
             "node_count": 2,
             "zones": [],
             "auto_scaling": {
