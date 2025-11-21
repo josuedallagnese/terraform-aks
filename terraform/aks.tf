@@ -27,11 +27,16 @@ resource "azurerm_kubernetes_cluster" "aks" {
     orchestrator_version          = var.aks.kubernetes_version
     zones                         = var.aks.default_node_pool.zones
     temporary_name_for_rotation   = "sysrotate01"
+    node_labels                   = { "nodepool-type" = "system" }
     tags                          = local.tags
 
     auto_scaling_enabled = var.aks.default_node_pool.auto_scaling.enabled
     min_count            = var.aks.default_node_pool.auto_scaling.min_count
     max_count            = var.aks.default_node_pool.auto_scaling.max_count
+
+    upgrade_settings {
+      max_surge = var.aks.default_node_pool.auto_scaling.max_surge
+    }
   }
 
   linux_profile {
@@ -50,13 +55,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
     gateway_id = azurerm_application_gateway.agw.id
   }
 
-   lifecycle {
-    ignore_changes = [
-      tags,
-      linux_profile,
-      default_node_pool[0].upgrade_settings,
-      default_node_pool[0].node_count
-    ]
+  lifecycle {
+   ignore_changes = [
+     tags,
+     linux_profile,
+     default_node_pool[0].upgrade_settings,
+     default_node_pool[0].node_count
+   ]
   }
 }
 
@@ -73,16 +78,23 @@ resource "azurerm_kubernetes_cluster_node_pool" "userpool" {
   os_type                     = "Linux"
   vnet_subnet_id              = azurerm_subnet.snet_aks.id
   temporary_name_for_rotation = "userrotate01"
+  node_labels                 = { "nodepool-type" = "user" }
+  node_taints                 = ["nodepool-type=user:NoSchedule"]
   tags                        = local.tags
 
   auto_scaling_enabled        = var.aks.user_node_pool.auto_scaling.enabled
   min_count                   = var.aks.user_node_pool.auto_scaling.min_count
   max_count                   = var.aks.user_node_pool.auto_scaling.max_count
 
+  upgrade_settings {
+    max_surge = var.aks.user_node_pool.auto_scaling.max_surge
+  }
+
   lifecycle {
     ignore_changes = [ 
       tags,
-      node_count
+      node_count,
+      upgrade_settings
      ]
   }
 }
@@ -134,6 +146,51 @@ resource "azurerm_role_assignment" "aks_log_analytics_contributor" {
     azurerm_kubernetes_cluster.aks,
     azurerm_log_analytics_workspace.log
   ]
+}
+
+resource "azurerm_role_assignment" "aks_contributor_rg" {
+  role_definition_name = "Contributor"
+  scope                = azurerm_kubernetes_cluster.aks.id
+  principal_id         = azurerm_kubernetes_cluster.aks.identity[0].principal_id
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks,
+    azurerm_resource_group.aks
+  ]
+
+  lifecycle {
+    ignore_changes = [principal_id]
+  }
+}
+
+resource "azurerm_role_assignment" "aks_contributor_node_rg" {
+  role_definition_name = "Contributor"
+  scope                = data.azurerm_resource_group.aks_node.id
+  principal_id         = azurerm_kubernetes_cluster.aks.identity[0].principal_id
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks,
+    data.azurerm_resource_group.aks_node
+  ]
+
+  lifecycle {
+    ignore_changes = [principal_id]
+  }
+}
+
+resource "azurerm_role_assignment" "aks_network_contributor_subnet" {
+  role_definition_name = "Network Contributor"
+  scope                = azurerm_subnet.snet_aks.id
+  principal_id         = azurerm_kubernetes_cluster.aks.identity[0].principal_id
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks,
+    azurerm_subnet.snet_aks
+  ]
+
+  lifecycle {
+    ignore_changes = [principal_id]
+  }
 }
 
 resource "azapi_resource_action" "apply_workloads" {

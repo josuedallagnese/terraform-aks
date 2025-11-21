@@ -37,20 +37,42 @@ echo "-----------------------------------------------"
 
 # === 1. Create snapshot from source disk ===
 echo "[1/4] Creating snapshot from source disk..."
+# Get the full resource ID of the source disk
+SOURCE_DISK_ID=$(az disk show \
+  --name "$SOURCE_DISK_NAME" \
+  --resource-group "$SOURCE_RG" \
+  --query "id" -o tsv)
+
+if [ -z "$SOURCE_DISK_ID" ]; then
+  echo "[ERROR] Could not find source disk: $SOURCE_DISK_NAME in resource group: $SOURCE_RG"
+  exit 1
+fi
+
 az snapshot create \
   --name "$SNAPSHOT_NAME" \
   --resource-group "$SOURCE_RG" \
-  --source "$SOURCE_DISK_NAME" \
+  --source "$SOURCE_DISK_ID" \
   --query "id" -o tsv
 
 echo "✅ Snapshot successfully created."
 
 # === 2. Create managed disk from snapshot ===
 echo "[2/4] Creating new managed disk from snapshot..."
+# Get the full resource ID of the snapshot
+SNAPSHOT_ID=$(az snapshot show \
+  --name "$SNAPSHOT_NAME" \
+  --resource-group "$SOURCE_RG" \
+  --query "id" -o tsv)
+
+if [ -z "$SNAPSHOT_ID" ]; then
+  echo "[ERROR] Could not find snapshot: $SNAPSHOT_NAME in resource group: $SOURCE_RG"
+  exit 1
+fi
+
 az disk create \
   --name "$DEST_DISK_NAME" \
   --resource-group "$DEST_RG" \
-  --source "$SNAPSHOT_NAME" \
+  --source "$SNAPSHOT_ID" \
   --query "id" -o tsv
 
 echo "✅ Managed disk successfully created."

@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "main_storage" {
-  name                     = "st${replace(local.sufix_storages_name, "-", "")}"
+  name                     = "st${local.department}${local.env}"
   resource_group_name      = azurerm_resource_group.storages.name
   location                 = azurerm_resource_group.storages.location
   account_tier             = var.storages.storage_account.account_tier
@@ -33,4 +33,33 @@ resource "azurerm_postgresql_flexible_server" "server" {
   tags                          = local.tags
 
   depends_on = [azurerm_private_dns_zone_virtual_network_link.link_storages]
+}
+
+# Configurações de diagnóstico para Query Store
+resource "azurerm_postgresql_flexible_server_configuration" "pg_qs_query_capture_mode" {
+  name      = "pg_qs.query_capture_mode"
+  server_id = azurerm_postgresql_flexible_server.server.id
+  value     = "ALL"
+}
+
+# Configurações de diagnóstico para Wait Sampling
+resource "azurerm_postgresql_flexible_server_configuration" "pgms_wait_sampling_query_capture_mode" {
+  name      = "pgms_wait_sampling.query_capture_mode"
+  server_id = azurerm_postgresql_flexible_server.server.id
+  value     = "ALL"
+}
+
+# Configuração para rastreamento de I/O timing
+resource "azurerm_postgresql_flexible_server_configuration" "track_io_timing" {
+  name      = "track_io_timing"
+  server_id = azurerm_postgresql_flexible_server.server.id
+  value     = "ON"
+}
+
+# Configuração para extensões Azure
+resource "azurerm_postgresql_flexible_server_configuration" "azure_extensions" {
+  count     = coalesce(var.storages.postgres.server.azure_extensions, "") != "" ? 1 : 0
+  name      = "azure.extensions"
+  server_id = azurerm_postgresql_flexible_server.server.id
+  value     = var.storages.postgres.server.azure_extensions
 }

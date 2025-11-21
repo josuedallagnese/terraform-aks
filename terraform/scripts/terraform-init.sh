@@ -85,53 +85,13 @@ CERT_EXISTS=$(az keyvault certificate show \
 
 if [ -z "$CERT_EXISTS" ]; then
   echo "[INFO] Creating default-${ENVIRONMENT} certificate..."
-  cat > /tmp/cert-policy.json <<EOF
-{
-  "issuerParameters": {
-    "name": "Self"
-  },
-  "x509CertificateProperties": {
-    "subject": "CN=lab.dallagnese.dev",
-    "subjectAlternativeNames": {
-      "dnsNames": [
-        "lab.dallagnese.dev",
-        "*.lab.dallagnese.dev"
-      ]
-    },
-    "ekus": [
-      "1.3.6.1.5.5.7.3.1",
-      "1.3.6.1.5.5.7.3.2"
-    ],
-    "keyUsage": [
-      "digitalSignature",
-      "keyEncipherment"
-    ],
-    "validityInMonths": 12
-  },
-  "keyProperties": {
-    "exportable": true,
-    "keyType": "RSA",
-    "keySize": 2048,
-    "reuseKey": false
-  },
-  "lifetimeActions": [
-    {
-      "trigger": { "daysBeforeExpiry": 30 },
-      "action": { "actionType": "AutoRenew" }
-    }
-  ],
-  "secretProperties": { "contentType": "application/x-pkcs12" }
-}
-EOF
-
   az keyvault certificate create \
     --vault-name "${KEY_VAULT_NAME}" \
     --name "default-${ENVIRONMENT}" \
-    --policy @/tmp/cert-policy.json >/dev/null
-  rm -f /tmp/cert-policy.json
-  echo "[INFO] Default certificate created successfully."
+    --policy '{"issuerParameters": {"name": "Self"}}' >/dev/null
+  echo "[INFO] default-${ENVIRONMENT} certificate created successfully."
 else
-  echo "[INFO] Default certificate already exists. Skipping creation."
+  echo "[INFO] default-${ENVIRONMENT} certificate already exists. Skipping creation."
 fi
 
 echo "[INFO] Checking SSH keys in Key Vault..."

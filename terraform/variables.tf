@@ -76,6 +76,7 @@ variable "storages" {
         zone                         = string
         version                      = string
         ssl_enforcement_enabled      = bool
+        azure_extensions             = optional(string, null)
       })
     })
     storage_account = object({
@@ -101,7 +102,9 @@ variable "aks" {
         enabled    = bool
         min_count  = number
         max_count  = number
+        max_surge = number
       })
+      
     })
     user_node_pool = object({
       vm_size       = string
@@ -111,6 +114,7 @@ variable "aks" {
         enabled    = bool
         min_count  = number
         max_count  = number
+        max_surge = number
       })
     })
   })

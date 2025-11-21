@@ -44,6 +44,14 @@ data "azurerm_user_assigned_identity" "ingress" {
   ]
 }
 
+data "azurerm_resource_group" "aks_node" {
+  name = azurerm_kubernetes_cluster.aks.node_resource_group
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
+}
+
 data "azurerm_storage_account_sas" "tools_sas" {
   connection_string = data.azurerm_storage_account.shared.primary_connection_string
   https_only        = true

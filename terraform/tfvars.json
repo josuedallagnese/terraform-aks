@@ -47,7 +47,8 @@
                 "auto_grow_enabled": false,
                 "zone": "1",
                 "version": "16",
-                "ssl_enforcement_enabled": true
+                "ssl_enforcement_enabled": true,
+                "azure_extensions": "VECTOR"	
             }
         },
         "storage_account": {
@@ -62,23 +63,25 @@
         "vnet_address_space": ["10.8.0.0/16"],
         "subnet_address_prefixes": ["10.8.0.0/22"],
         "default_node_pool": {
-            "vm_size": "Standard_D2s_v3",
+            "vm_size": "Standard_D4s_v3",
             "node_count": 1,
             "zones": [],
             "auto_scaling": {
                 "enabled": true,
                 "min_count": 1,
-                "max_count": 2
+                "max_count": 2,
+                "max_surge": 1
             }
         },
         "user_node_pool": {
-            "vm_size": "Standard_D2s_v3",
-            "node_count": 2,
+            "vm_size": "Standard_D4s_v3",
+            "node_count": 1,
             "zones": [],
             "auto_scaling": {
                 "enabled": true,
-                "min_count": 2,
-                "max_count": 5
+                "min_count": 1,
+                "max_count": 5,
+                "max_surge": 0
             }
         }
     }
